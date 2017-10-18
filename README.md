@@ -1,2 +1,2 @@
-# phinx
-phinx_work
+# sphinx
+sphinx_work
