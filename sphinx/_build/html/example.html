@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>This is a Title &#8212; Ababe Mannual 3.6.1 documentation</title>
+    <title>ababe结构枚举包的安装和使用 &#8212; Ababe Mannual 3.6.1 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -39,35 +39,180 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="this-is-a-title">
-<h1>This is a Title<a class="headerlink" href="#this-is-a-title" title="Permalink to this headline">¶</a></h1>
-<p>That has a paragraph about a main subject and is set when the ‘=’
-is at least the same length of the title itself.</p>
-<div class="section" id="subject-subtitle">
-<h2>Subject Subtitle<a class="headerlink" href="#subject-subtitle" title="Permalink to this headline">¶</a></h2>
-<p>Subtitles are set with ‘-‘ and are required to have the same length
-of the subtitle itself, just like titles.中文</p>
-<p>Lists can be unnumbered like:</p>
+  <div class="section" id="ababe">
+<h1>ababe结构枚举包的安装和使用<a class="headerlink" href="#ababe" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>一.安装<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>python环境的搭建和包的安装以新买的服务器为实例。</p>
+<div class="section" id="id2">
+<h3>1.下载<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<p>提供以下下载链接： 稳定版：ababe-dev， 开发者版：ababe-master</p>
+<p>下载软件包，并将其放在
+..</p>
 <blockquote>
-<div><ul class="simple">
-<li>Item Foo</li>
-<li>Item Bar</li>
-</ul>
-</div></blockquote>
-<p>Or automatically numbered:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li>Item 1</li>
-<li>Item 2</li>
-</ol>
-</div></blockquote>
+<div>$HOME/Apps/ 中。解压:</div></blockquote>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ unzip $HOME/Apps/ababe-master.zip
+</pre></div>
 </div>
-<div class="section" id="inline-markup">
-<h2>Inline Markup<a class="headerlink" href="#inline-markup" title="Permalink to this headline">¶</a></h2>
-<p>Words can have <em>emphasis in italics</em> or be <strong>bold</strong> and you can define
-code samples with back quotes, like when you talk about a command: <code class="docutils literal"><span class="pre">sudo</span></code>
-gives you super user powers!</p>
-<img alt="_images/system_activity.jpg" src="_images/system_activity.jpg" />
+</div>
+<div class="section" id="python">
+<h3>2.python环境搭建和依赖的安装<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<p>到tuna清华开源镜像站， 下载最新的Anaconda安装包。如果独立安装在自己的目录下直接运行安装包即可。 在服务器上安装该软件包，建议下载Miniconda这个Anaconda的轻量级替代，默认之包含了 python和conda，但是可以通过pip和conda来安装所需要的包，具体使用参考[conda-tutorial]。</p>
+<p>在服务器上安装公用的conda，使用管理员账户运行安装包。安装位置选择在/opt/anaconda3中。</p>
+<p>安装完成后，其他用户可以通过conda命令在自己的家中创建环境。 由于国内网络环境不好，建议使用tuna清华的conda镜像。 运行以下命令：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+$ conda config --set show_channel_urls yes
+</pre></div>
+</div>
+<p>添加tuna维护的一下anaconda三方源：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+</pre></div>
+</div>
+<p>现在，你就可以使用conda命令快速创建你所需要的python环境。 比如我要创建ababe所需要的python环境，在命令行运行：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ conda create -n ababe-py3 python=3
+</pre></div>
+</div>
+<p>参数-n指定环境名称，python=指定环境所使用的python版本。</p>
+<p>安装完成后可以通过以下命令查询当前已经安装的环境：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ conda info --env
+</pre></div>
+</div>
+<p>按照提示，使用source activate &lt;name-of-env&gt;进入安装的环境。</p>
+</div>
+<div class="section" id="id3">
+<h3>3.包的安装<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>首先安装numpy和scipy，运行：conda install numpy scipy</p>
+<p>安装并进入环境后，进入ababe源代码目录。运行：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ pip install .
+</pre></div>
+</div>
+<p>可以用参数-e指定安装为开发模式，任何对软件的修改会直接显示在环境的使用过程中。</p>
+</div>
+<div class="section" id="id4">
+<h3>4.运行单元测试<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+<p>安装完成后可以进行单元测试。在包的起始目录$HOME/Apps/ababe/中运行：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ nose2
+</pre></div>
+</div>
+<p>进行测试。通过后表示安装完整，且环境正确。</p>
+</div>
+</div>
+<div class="section" id="id5">
+<h2>二.使用<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<p>当前完成的功能为：</p>
+<blockquote>
+<div>给出原始晶体结构和变换矩阵scale_matrix得到变换后的超胞。runaba supcell –help
+给定体积和最小胞给出所有超胞，支持二维。runaba suplat –help
+以及给定超胞和该超胞中要替换原子种类，在该位点处进行所有替代产生结构的枚举。runaba ocumaker –help</div></blockquote>
+<p>下面对各个功能进行举例。</p>
+<div class="section" id="id6">
+<h3>5.给定体积胞的枚举<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+<p>使用命令runaba suplat &lt;input.yaml&gt;</p>
+<p>参数介绍：</p>
+<blockquote>
+<div>&lt;input.yaml&gt;: 包含原胞信息的yaml文件，例子在下文给出
+–comment: 影响输出文件所在目录的目录名称后缀（可在输入文件中给出）
+–volumn: 目标超胞的体积，原来的超胞为1
+–zoom: 所生成结构的缩放比例（可在输入文件中给出）
+-L: 是否只在二维上扩充，若打开，则只在晶格的前两个方向上延伸
+–outmode [vasp|yaml]: 输出文件的格式</div></blockquote>
+<p>输入文件示例(minimal)，可将文件保存为bcc_cu.yaml：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>!#yaml
+# An example config file for script superLatticeGenerator.py
+# Need 5 parameters as input. which are dir name, unit_basis, unit_positions,
+# and unit_numbers, and max volumn to extend the superlattice respectively.
+
+# All Superlattice produce to a directory
+# name of the dir give following:
+lattice:
+- [1.5, 1.5, -1.5]
+- [-1.5,  1.5,  1.5]
+- [ 1.5, -1.5,  1.5]
+
+positions:
+- [0., 0., 0.]
+
+# Cu as the sea element
+numbers: [29]
+</pre></div>
+</div>
+<p>运行：（maximal)</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">runaba</span> <span class="n">suplat</span> <span class="o">./</span><span class="n">bcc</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">volumn</span> <span class="mi">5</span> <span class="o">--</span><span class="n">zoom</span> <span class="mf">1.2</span> <span class="o">--</span><span class="n">outmode</span> <span class="n">vasp</span> <span class="o">--</span><span class="n">comment</span> <span class="s2">&quot;bcc_cu&quot;</span>
+</pre></div>
+</div>
+<div class="section" id="c">
+<h4>二维超胞枚举（元素C为例）<a class="headerlink" href="#c" title="Permalink to this headline">¶</a></h4>
+<p>输入文件示例，可将文件保存为C_2d.yaml</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># name of the dir give following:</span>
+<span class="n">comment</span><span class="p">:</span> <span class="n">C_2d</span>
+
+<span class="c1"># unit_basis: A 2-D LIST</span>
+<span class="n">lattice</span><span class="p">:</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span>  <span class="mf">1.732</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>  <span class="mi">20</span><span class="p">]</span>
+
+<span class="c1"># unit_positions: A 2-D LIST</span>
+<span class="n">positions</span><span class="p">:</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># unit_numbers: A 1-D LIST</span>
+<span class="n">numbers</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+
+<span class="c1"># zoom of output structure</span>
+<span class="n">zoom</span><span class="p">:</span> <span class="mf">1.6</span>
+</pre></div>
+</div>
+<p>运行：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">runaba</span> <span class="n">suplat</span> <span class="o">-</span><span class="n">L</span> <span class="o">./</span><span class="n">C_2d</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">volumn</span> <span class="mi">8</span> <span class="o">--</span><span class="n">outmode</span> <span class="n">vasp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="id7">
+<h3>6.给定超胞不同替代的枚举<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+<p>使用命令runaba ocumaker [OPTION] &lt;input.yaml&gt;</p>
+<p>参数[OPTION]介绍：</p>
+<blockquote>
+<div>&lt;input.yaml&gt;: 包含要取代胞信息的yaml文件，例子在下文给出
+–comment: 影响输出文件所在目录的目录名称后缀（可在输入文件中给出），在上一步的yaml输出中自动给出
+–element: 所要取代的元素（在多元化合物中有用），默认为number中第一个元素。
+–speckle: 替换成为的元素，默认为空位。
+–number-speckle, ‘-n’: 最大替换元素原子个数，默认取代到最大数量-1。
+–zoom: 所生成结构的缩放比例（可在输入文件中给出）</div></blockquote>
+<p>输入文件示例(minimal)，可将文件保存为SUPLAT_8_C.yaml：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">comment</span><span class="p">:</span> <span class="n">C16</span>
+<span class="n">lattice</span><span class="p">:</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">16.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.732</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">]</span>
+<span class="n">numbers</span><span class="p">:</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+<span class="n">positions</span><span class="p">:</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.0416625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.125</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.1666625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.2916625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.375</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.4166625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.5416625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.625</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.6666625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.7916625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.875</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="o">-</span> <span class="p">[</span><span class="mf">0.9166625</span><span class="p">,</span> <span class="mf">0.3333</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]</span>
+<span class="n">zoom</span><span class="p">:</span> <span class="mf">1.6</span>
+</pre></div>
+</div>
+<p>运行：</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">runaba</span> <span class="n">ocumaker</span> <span class="o">./</span><span class="n">SUPLAT_8_C</span><span class="o">.</span><span class="n">yaml</span> <span class="o">--</span><span class="n">element</span> <span class="n">C</span> <span class="o">--</span><span class="n">speckle</span> <span class="n">B</span> <span class="o">--</span><span class="n">zoom</span> <span class="mi">1</span> <span class="o">-</span><span class="n">n</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 
@@ -89,9 +234,9 @@ gives you super user powers!</p>
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">This is a Title</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#subject-subtitle">Subject Subtitle</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#inline-markup">Inline Markup</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ababe结构枚举包的安装和使用</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">一.安装</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">二.使用</a></li>
 </ul>
 </li>
 </ul>

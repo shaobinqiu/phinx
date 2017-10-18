@@ -1,27 +1,196 @@
-This is a Title
-===============
-That has a paragraph about a main subject and is set when the '='
-is at least the same length of the title itself.
+=============================
+ababe结构枚举包的安装和使用
+=============================
+一.安装
+------------------------
+python环境的搭建和包的安装以新买的服务器为实例。
 
-Subject Subtitle
-----------------
-Subtitles are set with '-' and are required to have the same length
-of the subtitle itself, just like titles.中文
+1.下载
+>>>>>>>>>>>>>>>>>>>>>>>>
+提供以下下载链接： 稳定版：ababe-dev， 开发者版：ababe-master
 
-Lists can be unnumbered like:
+下载软件包，并将其放在$HOME/Apps/ 中。解压:
 
- * Item Foo
- * Item Bar
+::
 
-Or automatically numbered:
+    $ unzip $HOME/Apps/ababe-master.zip
 
- #. Item 1
- #. Item 2
+2.python环境搭建和依赖的安装
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+到tuna清华开源镜像站， 下载最新的Anaconda安装包。如果独立安装在自己的目录下直接运行安装包即可。 在服务器上安装该软件包，建议下载Miniconda这个Anaconda的轻量级替代，默认之包含了 python和conda，但是可以通过pip和conda来安装所需要的包，具体使用参考[conda-tutorial]。
 
-Inline Markup
--------------
-Words can have *emphasis in italics* or be **bold** and you can define
-code samples with back quotes, like when you talk about a command: ``sudo``
-gives you super user powers!
+在服务器上安装公用的conda，使用管理员账户运行安装包。安装位置选择在/opt/anaconda3中。
 
-.. image:: _static/system_activity.jpg
+安装完成后，其他用户可以通过conda命令在自己的家中创建环境。 由于国内网络环境不好，建议使用tuna清华的conda镜像。 运行以下命令：
+::
+
+    $ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+    $ conda config --set show_channel_urls yes
+
+添加tuna维护的一下anaconda三方源：
+::
+
+    $ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+
+现在，你就可以使用conda命令快速创建你所需要的python环境。 比如我要创建ababe所需要的python环境，在命令行运行：
+::
+
+    $ conda create -n ababe-py3 python=3
+
+参数-n指定环境名称，python=指定环境所使用的python版本。
+
+安装完成后可以通过以下命令查询当前已经安装的环境：
+::
+
+    $ conda info --env
+
+按照提示，使用source activate <name-of-env>进入安装的环境。
+
+3.包的安装
+>>>>>>>>>>>>>>>
+
+首先安装numpy和scipy，运行：conda install numpy scipy
+
+安装并进入环境后，进入ababe源代码目录。运行：
+::
+
+    $ pip install .
+
+可以用参数-e指定安装为开发模式，任何对软件的修改会直接显示在环境的使用过程中。
+
+4.运行单元测试
+>>>>>>>>>>>>>>>>
+安装完成后可以进行单元测试。在包的起始目录$HOME/Apps/ababe/中运行：
+::
+
+    $ nose2
+
+进行测试。通过后表示安装完整，且环境正确。
+
+二.使用
+--------------
+当前完成的功能为：
+
+    给出原始晶体结构和变换矩阵scale_matrix得到变换后的超胞。runaba supcell \--help
+    给定体积和最小胞给出所有超胞，支持二维。runaba suplat --help
+    以及给定超胞和该超胞中要替换原子种类，在该位点处进行所有替代产生结构的枚举。runaba ocumaker --help
+
+下面对各个功能进行举例。
+
+5.给定体积胞的枚举
+>>>>>>>>>>>>>>>>>>>>
+
+使用命令runaba suplat <input.yaml>
+
+参数介绍：
+
+    <input.yaml>: 包含原胞信息的yaml文件，例子在下文给出
+    --comment: 影响输出文件所在目录的目录名称后缀（可在输入文件中给出）
+    --volumn: 目标超胞的体积，原来的超胞为1
+    --zoom: 所生成结构的缩放比例（可在输入文件中给出）
+    -L: 是否只在二维上扩充，若打开，则只在晶格的前两个方向上延伸
+    --outmode [vasp|yaml]: 输出文件的格式
+
+输入文件示例(minimal)，可将文件保存为bcc_cu.yaml：
+::
+
+    !#yaml
+    # An example config file for script superLatticeGenerator.py
+    # Need 5 parameters as input. which are dir name, unit_basis, unit_positions,
+    # and unit_numbers, and max volumn to extend the superlattice respectively.
+
+    # All Superlattice produce to a directory
+    # name of the dir give following:
+    lattice:
+    - [1.5, 1.5, -1.5]
+    - [-1.5,  1.5,  1.5]
+    - [ 1.5, -1.5,  1.5]
+
+    positions:
+    - [0., 0., 0.]
+
+    # Cu as the sea element
+    numbers: [29]
+
+运行：（maximal)
+::
+
+    runaba suplat ./bcc.yaml --volumn 5 --zoom 1.2 --outmode vasp --comment "bcc_cu"
+
+二维超胞枚举（元素C为例）
+:::::::::::::::::::::::::::
+
+输入文件示例，可将文件保存为C_2d.yaml
+::
+
+    # name of the dir give following:
+    comment: C_2d
+
+    # unit_basis: A 2-D LIST
+    lattice:
+    - [2.0, 0, 0]
+    - [1,  1.732, 0]
+    - [ 0, 0,  20]
+
+    # unit_positions: A 2-D LIST
+    positions:
+    - [0., 0., 0.]
+    - [0.3333, 0.3333, 0]
+
+    # unit_numbers: A 1-D LIST
+    numbers: [6, 6]
+
+    # zoom of output structure
+    zoom: 1.6
+
+运行：
+::
+
+    runaba suplat -L ./C_2d.yaml --volumn 8 --outmode vasp
+
+6.给定超胞不同替代的枚举
+>>>>>>>>>>>>>>>>>>>>>>>>
+
+使用命令runaba ocumaker [OPTION] <input.yaml>
+
+参数[OPTION]介绍：
+
+    <input.yaml>: 包含要取代胞信息的yaml文件，例子在下文给出
+    --comment: 影响输出文件所在目录的目录名称后缀（可在输入文件中给出），在上一步的yaml输出中自动给出
+    --element: 所要取代的元素（在多元化合物中有用），默认为number中第一个元素。
+    --speckle: 替换成为的元素，默认为空位。
+    --number-speckle, '-n': 最大替换元素原子个数，默认取代到最大数量-1。
+    --zoom: 所生成结构的缩放比例（可在输入文件中给出）
+
+输入文件示例(minimal)，可将文件保存为SUPLAT_8_C.yaml：
+::
+
+    comment: C16
+    lattice:
+    - [16.0, 0.0, 0.0]
+    - [1.0, 1.732, 0.0]
+    - [0.0, 0.0, 20.0]
+    numbers: [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+    positions:
+    - [0.0, 0.0, 0.0]
+    - [0.0416625, 0.3333, 0.0]
+    - [0.125, 0.0, 0.0]
+    - [0.1666625, 0.3333, 0.0]
+    - [0.25, 0.0, 0.0]
+    - [0.2916625, 0.3333, 0.0]
+    - [0.375, 0.0, 0.0]
+    - [0.4166625, 0.3333, 0.0]
+    - [0.5, 0.0, 0.0]
+    - [0.5416625, 0.3333, 0.0]
+    - [0.625, 0.0, 0.0]
+    - [0.6666625, 0.3333, 0.0]
+    - [0.75, 0.0, 0.0]
+    - [0.7916625, 0.3333, 0.0]
+    - [0.875, 0.0, 0.0]
+    - [0.9166625, 0.3333, 0.0]
+    zoom: 1.6
+
+运行：
+::
+
+    runaba ocumaker ./SUPLAT_8_C.yaml --element C --speckle B --zoom 1 -n 3
